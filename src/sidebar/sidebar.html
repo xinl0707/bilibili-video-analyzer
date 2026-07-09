@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B站视频分析</title>
+    <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+    <!-- 标题栏 -->
+    <header id="header">
+        <div class="header-left">
+            <span class="header-icon">🎵</span>
+            <span class="header-title">B站视频分析</span>
+        </div>
+        <div class="header-right">
+            <button id="btnHistory" class="icon-btn" title="分析历史">📚</button>
+            <button id="btnTheme" class="icon-btn" title="切换主题">🌙</button>
+            <button id="btnSettings" class="icon-btn" title="设置">⚙️</button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main id="main">
+        <!-- 欢迎/空闲状态 -->
+        <div id="welcomeView" class="view active">
+            <div class="welcome-content">
+                <div class="welcome-icon">🎬</div>
+                <h2>B站视频快速分析</h2>
+                <p>打开一个B站视频，点击扩展图标或按 <kbd>Alt+B</kbd> 开始分析</p>
+                <div class="welcome-features">
+                    <div class="feature-item">📝 自动获取字幕或音频识别</div>
+                    <div class="feature-item">🤖 AI智能总结视频内容</div>
+                    <div class="feature-item">💬 对话交互深入分析</div>
+                    <div class="feature-item">📤 多格式导出结果</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分析视图 -->
+        <div id="analysisView" class="view">
+            <!-- 视频信息卡片 -->
+            <div id="videoInfoCard" class="card hidden">
+                <div class="video-title" id="videoTitle">-</div>
+                <div class="video-meta">
+                    <span id="videoUploader">-</span>
+                    <span class="meta-sep">·</span>
+                    <span id="videoDuration">-</span>
+                    <span class="meta-sep">·</span>
+                    <span id="videoBvid">-</span>
+                </div>
+            </div>
+
+            <!-- 进度区域 -->
+            <div id="progressSection" class="card hidden">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+                <div class="progress-message" id="progressMessage">准备中...</div>
+
+                <!-- 识别文字区域 -->
+                <div id="transcriptArea" class="transcript-area hidden">
+                    <div class="transcript-text" id="transcriptText"></div>
+                </div>
+
+                <!-- 时间预估 -->
+                <div id="timeEstimate" class="time-estimate hidden">
+                    <span>⏱️ 已用时 <span id="elapsedTime">00:00</span></span>
+                    <span class="time-sep">|</span>
+                    <span>预计剩余 <span id="remainingTime">计算中...</span></span>
+                </div>
+            </div>
+
+            <!-- 摘要卡片 -->
+            <div id="summaryCard" class="card hidden">
+                <div class="card-header">
+                    <span class="card-title">📋 视频摘要</span>
+                    <button id="btnCopySummary" class="icon-btn small" title="复制摘要">📋</button>
+                </div>
+                <div class="summary-content" id="summaryContent"></div>
+            </div>
+
+            <!-- 对话区域 -->
+            <div id="chatSection" class="hidden">
+                <div class="section-header">
+                    <span>💬 继续对话</span>
+                </div>
+
+                <!-- 对话消息区 -->
+                <div id="chatMessages" class="chat-messages"></div>
+
+                <!-- 预设问题 -->
+                <div id="presetQuestions" class="preset-questions">
+                    <button class="preset-btn" data-question="请列出这个视频的关键要点">关键要点</button>
+                    <button class="preset-btn" data-question="这个视频有哪些有争议或值得讨论的观点？">争议观点</button>
+                    <button class="preset-btn" data-question="请补充视频中的一些重要细节">补充细节</button>
+                    <button class="preset-btn" data-question="用一句话概括这个视频的核心内容">一句话总结</button>
+                </div>
+
+                <!-- 输入框 -->
+                <div class="chat-input-container">
+                    <textarea id="chatInput" placeholder="输入你的问题..." rows="1"></textarea>
+                    <button id="btnSend" class="send-btn" title="发送">➤</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 历史记录视图 -->
+        <div id="historyView" class="view">
+            <div class="view-header">
+                <button id="btnBackFromHistory" class="icon-btn">← 返回</button>
+                <span class="view-title">📚 分析历史</span>
+                <button id="btnClearHistory" class="icon-btn small danger">清空</button>
+            </div>
+            <div id="historyList" class="history-list"></div>
+        </div>
+
+        <!-- 设置视图 -->
+        <div id="settingsView" class="view">
+            <div class="view-header">
+                <button id="btnBackFromSettings" class="icon-btn">← 返回</button>
+                <span class="view-title">⚙️ 设置</span>
+            </div>
+            <div class="settings-content">
+                <!-- AI 模型配置 -->
+                <div class="settings-group">
+                    <h3>AI 模型配置</h3>
+                    <div class="form-item">
+                        <label>API Key</label>
+                        <input type="password" id="cfgApiKey" placeholder="输入你的 API Key">
+                    </div>
+                    <div class="form-item">
+                        <label>Base URL</label>
+                        <input type="text" id="cfgBaseUrl" placeholder="API 地址">
+                    </div>
+                    <div class="form-item">
+                        <label>ASR 模型</label>
+                        <input type="text" id="cfgAsrModel" placeholder="语音识别模型">
+                    </div>
+                    <div class="form-item">
+                        <label>对话模型</label>
+                        <input type="text" id="cfgChatModel" placeholder="对话/总结模型">
+                    </div>
+                    <button id="btnTestApi" class="btn-secondary">测试连接</button>
+                </div>
+
+                <!-- 识别设置 -->
+                <div class="settings-group">
+                    <h3>识别设置</h3>
+                    <div class="form-item">
+                        <label>ASR 语言</label>
+                        <select id="cfgAsrLanguage">
+                            <option value="zh">中文</option>
+                            <option value="en">英文</option>
+                            <option value="auto">自动检测</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label>MP3 码率</label>
+                        <select id="cfgMp3Bitrate">
+                            <option value="64">64 kbps（省流量）</option>
+                            <option value="96">96 kbps（推荐）</option>
+                            <option value="128">128 kbps（高质量）</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 总结设置 -->
+                <div class="settings-group">
+                    <h3>总结设置</h3>
+                    <div class="form-item">
+                        <label>总结风格</label>
+                        <select id="cfgSummaryStyle">
+                            <option value="default">默认</option>
+                            <option value="academic">学术型</option>
+                            <option value="casual">通俗型</option>
+                            <option value="bullet">要点型</option>
+                            <option value="mindmap">思维导图型</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label>自定义系统提示词</label>
+                        <textarea id="cfgCustomPrompt" rows="4" placeholder="留空则使用总结风格预设"></textarea>
+                    </div>
+                    <div class="form-item toggle-item">
+                        <label>识别完成后自动总结</label>
+                        <input type="checkbox" id="cfgAutoSummarize" class="toggle">
+                    </div>
+                </div>
+
+                <button id="btnSaveSettings" class="btn-primary">保存设置</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部操作栏 -->
+    <footer id="footer" class="hidden">
+        <button id="btnExportMd" class="footer-btn" title="导出 Markdown">📥 MD</button>
+        <button id="btnExportTxt" class="footer-btn" title="导出纯文本">📥 TXT</button>
+        <button id="btnExportHtml" class="footer-btn" title="导出 HTML">📥 HTML</button>
+        <button id="btnRetry" class="footer-btn" title="重试">🔄 重试</button>
+    </footer>
+
+    <script src="sidebar.js"></script>
+</body>
+</html>

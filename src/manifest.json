@@ -1,0 +1,61 @@
+{
+    "manifest_version": 3,
+    "name": "B站视频快速分析",
+    "version": "1.0.0",
+    "description": "一键获取B站视频字幕/音频，AI语音识别+大模型总结，侧边栏对话交互",
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    },
+    "action": {
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png"
+        },
+        "default_title": "B站视频快速分析"
+    },
+    "background": {
+        "service_worker": "background/service-worker.js"
+    },
+    "side_panel": {
+        "default_path": "sidebar/sidebar.html"
+    },
+    "permissions": [
+        "sidePanel",
+        "storage",
+        "activeTab",
+        "scripting",
+        "commands"
+    ],
+    "host_permissions": [
+        "*://*.bilibili.com/*",
+        "*://*.bilibivideo.com/*",
+        "*://*.hdslb.com/*"
+    ],
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Alt+B"
+            },
+            "description": "触发视频分析"
+        }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.bilibili.com/video/*",
+                "*://*.bilibili.com/bangumi/*"
+            ],
+            "js": ["content/interceptor.js"],
+            "run_at": "document_start",
+            "all_frames": false
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["lib/*", "utils/*"],
+            "matches": ["*://*.bilibili.com/*"]
+        }
+    ]
+}

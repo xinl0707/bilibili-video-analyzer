@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B站视频分析 - 设置</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 B站视频分析 - 设置</h1>
+        </header>
+
+        <!-- AI 模型配置 -->
+        <section class="card">
+            <h2>AI 模型配置</h2>
+            <div class="form-item">
+                <label for="apiKey">API Key</label>
+                <input type="password" id="apiKey" placeholder="输入你的 MiMo API Key">
+                <p class="help">在 <a href="https://platform.xiaomimimo.com" target="_blank">platform.xiaomimimo.com</a> 获取</p>
+            </div>
+            <div class="form-item">
+                <label for="baseUrl">Base URL</label>
+                <input type="text" id="baseUrl" placeholder="API 地址">
+            </div>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="asrModel">ASR 模型</label>
+                    <input type="text" id="asrModel" placeholder="语音识别模型">
+                </div>
+                <div class="form-item">
+                    <label for="chatModel">对话模型</label>
+                    <input type="text" id="chatModel" placeholder="对话/总结模型">
+                </div>
+            </div>
+            <button id="btnTest" class="btn-secondary">测试连接</button>
+        </section>
+
+        <!-- 识别设置 -->
+        <section class="card">
+            <h2>识别设置</h2>
+            <div class="form-row">
+                <div class="form-item">
+                    <label for="asrLanguage">ASR 语言</label>
+                    <select id="asrLanguage">
+                        <option value="zh">中文</option>
+                        <option value="en">英文</option>
+                        <option value="auto">自动检测</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label for="mp3Bitrate">MP3 码率</label>
+                    <select id="mp3Bitrate">
+                        <option value="64">64 kbps（省流量）</option>
+                        <option value="96">96 kbps（推荐）</option>
+                        <option value="128">128 kbps（高质量）</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- 总结设置 -->
+        <section class="card">
+            <h2>总结设置</h2>
+            <div class="form-item">
+                <label for="summaryStyle">总结风格</label>
+                <select id="summaryStyle">
+                    <option value="default">默认</option>
+                    <option value="academic">学术型</option>
+                    <option value="casual">通俗型</option>
+                    <option value="bullet">要点型</option>
+                    <option value="mindmap">思维导图型</option>
+                </select>
+            </div>
+            <div class="form-item">
+                <label for="customPrompt">自定义系统提示词</label>
+                <textarea id="customPrompt" rows="6" placeholder="留空则使用总结风格预设"></textarea>
+            </div>
+            <div class="form-item toggle-item">
+                <label for="autoSummarize">识别完成后自动总结</label>
+                <input type="checkbox" id="autoSummarize" class="toggle">
+            </div>
+        </section>
+
+        <!-- 快捷键 -->
+        <section class="card">
+            <h2>快捷键</h2>
+            <p class="help">默认快捷键 <kbd>Alt+B</kbd>，可在 <a href="chrome://extensions/shortcuts" target="_blank">扩展快捷键设置</a> 中修改</p>
+        </section>
+
+        <!-- 操作按钮 -->
+        <section class="card actions">
+            <button id="btnSave" class="btn-primary">保存设置</button>
+            <button id="btnReset" class="btn-secondary">恢复默认</button>
+        </section>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+</html>

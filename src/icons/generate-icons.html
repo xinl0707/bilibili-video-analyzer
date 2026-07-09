@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title></head>
+<body>
+<h1>B站视频分析 - 图标生成器</h1>
+<p>点击下方按钮生成扩展图标文件（16x16, 48x48, 128x128）</p>
+<button onclick="generateIcons()">生成图标</button>
+<div id="output"></div>
+<script>
+function generateIcons() {
+    const sizes = [16, 48, 128];
+    const output = document.getElementById('output');
+    output.innerHTML = '<h2>生成结果：</h2>';
+
+    sizes.forEach(size => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        // 背景 - B站蓝色
+        ctx.fillStyle = '#00a1d6';
+        ctx.beginPath();
+        ctx.roundRect(0, 0, size, size, size * 0.15);
+        ctx.fill();
+
+        // 文字 "B"
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${size * 0.55}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('B', size/2, size/2 + size*0.02);
+
+        // AI 标记 - 小圆点
+        ctx.fillStyle = '#ff6699';
+        ctx.beginPath();
+        ctx.arc(size * 0.75, size * 0.25, size * 0.12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.font = `bold ${size * 0.14}px Arial`;
+        ctx.fillText('AI', size * 0.75, size * 0.26);
+
+        // 下载
+        const link = document.createElement('a');
+        link.download = `icon${size}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.textContent = `下载 icon${size}.png`;
+        link.style.display = 'block';
+        link.style.margin = '10px 0';
+        output.appendChild(link);
+        link.click();
+    });
+
+    output.innerHTML += '<p>✅ 图标已下载，请将它们放入 icons/ 文件夹</p>';
+}
+</script>
+</body>
+</html>
